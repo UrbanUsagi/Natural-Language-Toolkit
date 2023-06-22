@@ -1,0 +1,25 @@
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.sentiment import SentimentIntensityAnalyzer
+
+nltk.download('vader_lexicon')
+nltk.download('punkt')
+nltk.download('stopwords')
+
+def analyze_sentiment(text):
+    stop_words = set(stopwords.words('english'))
+    word_tokens = word_tokenize(text.lower())
+    filtered_tokens = [word for word in word_tokens if word.isalpha() and word not in stop_words]
+    filtered_text = ' '.join(filtered_tokens)
+
+    sia = SentimentIntensityAnalyzer()
+    sentiment_scores = sia.polarity_scores(filtered_text)
+    sentiment = "positive" if sentiment_scores['compound'] >= 0 else "negative"
+
+    return sentiment
+
+if __name__ == "__main__":
+    text = "I really enjoyed watching the movie. The acting was superb and the plot was engaging."
+    sentiment = analyze_sentiment(text)
+    print("Sentiment:", sentiment)
